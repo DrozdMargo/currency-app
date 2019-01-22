@@ -91,7 +91,6 @@
                                slot="progress"
                                color="blue"
                                indeterminate>
-
             </v-progress-linear>
           </v-flex>
         </v-layout>
