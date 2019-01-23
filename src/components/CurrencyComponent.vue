@@ -16,7 +16,7 @@
           Accusantium dolor minima molestiae numquam possimus qui, repudiandae sed!
         </p>
         <h2 class="headline font-weight-bold mb-3 text-xs-center" v-if="exchanges">Information for
-          {{exchanges.date}}</h2>
+          {{lastUpdateTime}}</h2>
       </v-flex>
     </v-layout>
 
@@ -82,9 +82,9 @@
                 <th>Name</th>
                 <th>Rate</th>
               </tr>
-              <tr v-for="(rate, key) in exchanges.rates" :key="key">
-                <td>{{key}}</td>
-                <td>{{rate}}</td>
+              <tr v-for="(rate, key) in rates" :key="key">
+                <td>{{rate.currency}}</td>
+                <td>{{rate.value}}</td>
               </tr>
             </table>
             <v-progress-linear v-else
@@ -94,13 +94,14 @@
             </v-progress-linear>
           </v-flex>
         </v-layout>
-
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+  import moment from 'moment';
+
   export default {
     name: 'CurrencyComponent',
     data: () => ({
@@ -119,6 +120,12 @@
     computed: {
       exchanges() {
         return this.$store.state.exchangeList;
+      },
+      rates() {
+        return this.$store.getters.currencyRatesInRub;
+      },
+      lastUpdateTime() {
+        return moment.utc(this.exchanges.timestamp*1000).format('DD/MM/YYYY hh:mm:ss');
       }
     },
     methods: {
