@@ -107,7 +107,8 @@
     data: () => ({
       selectedCurrency: ['EUR', 'USD'],
       currency: ['EUR', 'USD', 'JPY', 'CAD'],
-      isLoading: true
+      isLoading: true,
+      lastUpdateTime: moment(new Date()).format('DD/MM/YYYY hh:mm:ss')
     }),
     mounted() {
       this.fetchData();
@@ -123,13 +124,11 @@
       },
       rates() {
         return this.$store.getters.currencyRatesInRub;
-      },
-      lastUpdateTime() {
-        return moment.utc(this.exchanges.timestamp*1000).format('DD/MM/YYYY hh:mm:ss');
       }
     },
     methods: {
       fetchData() {
+        this.lastUpdateTime = moment(new Date()).format('L') + ' ' + moment(new Date()).format('LTS');
         this.isLoading = true;
         this.$store.dispatch('fetchExchangeRates', this.selectedCurrency);
         this.isLoading = false;
